@@ -3,7 +3,8 @@
 #include "DHTReader.h"
 
 
-DHTReader dhtReader;
+
+extern DHTReader dhtReader;
 // insliging the SerialHandler Constructor
 SerialHandler::SerialHandler() {
   monitoringActive = false;
@@ -59,8 +60,8 @@ void SerialHandler::handleInput() {
         if (monitoringActive != true) {
           Serial.print("Please Start DHT11.....");
         } else {
-          Serial.print("Getting Temp:" + String(readTemperature()));
-          Serial.print("Getting Humidity:" + String(readHumidity()));
+          Serial.print("Getting Temp:" + String(dhtReader.readTemperature()));
+          Serial.print("Getting Humidity:" + String(dhtReader.readHumidity()));
         }
         break;
 
