@@ -33,10 +33,10 @@ void loop() {
       return;
     }
 
-    Serial.print("Humidity: ");
+    Serial.print("Humidity : ");
     Serial.print(h);
     Serial.print(" %  |  ");
-    Serial.print("Temperature: ");
+    Serial.print("Temperature : ");
     Serial.print(t);
     Serial.println(" °C");
 
@@ -48,7 +48,8 @@ void loop() {
 
 
     if (t > serialHandler.getTemperatureThreshold() || h > serialHandler.getHumidityThreshold()) {
-      turnOn();
+      //turnOn();
+      normalBlink(50);
     } else if (t < 15 || h < 30) {
       normalBlink(200);
     } else {
