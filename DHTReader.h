@@ -5,7 +5,7 @@
 #include <queue>
 #include <utility> // for std::pair
 
-#define DHTPIN 4        // GPIO pin where your DHT sensor is connected
+#define DHTPIN 15        // GPIO pin where your DHT sensor is connected
 #define DHTTYPE DHT11   // Or DHT11, depending on your sensor
 
 
@@ -29,6 +29,7 @@ public:
 
     float readTemperature();
     float readHumidity();
+    bool isCalibrat();
 };
 
 #endif
