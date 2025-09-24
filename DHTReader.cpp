@@ -22,6 +22,7 @@ void DHTReader::begin() {
 
 // raw getters
 float DHTReader::readRawHumidity() {
+  Serial.print("here");
   return dht.readHumidity();
 }
 float DHTReader::readRawTemperature() {
@@ -38,56 +39,70 @@ float DHTReader::readRawTemperature() {
 // calibration with rolling mean
 void DHTReader::calibrate() {
 
-    int samplesCount = 10;
-    float t = readRawTemperature();
-    float h = readRawHumidity();
+    //Serial.print("Entered");
 
-    // push new sample
-    samples.push({t, h});
+    float samplesCount = 30;
     float tSum = 0.0, hSum = 0.0;
 
-    tSum += t;
-    hSum += h;
+    while(samples.size() < samplesCount) {
+      float t = readRawTemperature();
+      float h = readRawHumidity();
 
-    // keep only last N samples
-    if (samples.size() > samplesCount) {
-        samples.pop();
+      // push new sample
+      samples.push({t, h});
+
+      tSum += t;
+      hSum += h;
+      delay(200);
     }
+
+    Serial.print(samples.size());
+    
+    //temperatureOffSet = hSum;
+    //humidityOffSet = tSum;
 
     // only start calibration if we have enough samples
     if (samples.size() == samplesCount) {
 
-        float newTempOffset = tSum / samplesCount;
-        float newHumOffset  = hSum / samplesCount;
+      Serial.print("Entered");
+      float newTempOffset = tSum / samplesCount;
+      float newHumOffset  = hSum / samplesCount;
 
         // dynamic threshold
-        float tempDiff = fabs(newTempOffset - temperatureOffSet);
-        float humDiff  = fabs(newHumOffset - humidityOffSet);
+      float tempDiff = fabs(newTempOffset - temperatureOffSet);
+      float humDiff  = fabs(newHumOffset - humidityOffSet);
 
-        float tempThreshold = 0.05 * fabs(newTempOffset); // 5%
-        float humThreshold  = 0.05 * fabs(newHumOffset);
+      float tempThreshold = 0.05 * fabs(newTempOffset); // 5%
+      float humThreshold  = 0.05 * fabs(newHumOffset);
 
-        if (tempDiff > tempThreshold || humDiff > humThreshold) {
-            temperatureOffSet = newTempOffset;
-            humidityOffSet = newHumOffset;
-        }
+      if (tempDiff > tempThreshold || humDiff > humThreshold) {
+        temperatureOffSet = newTempOffset;
+        humidityOffSet = newHumOffset;
+      }
 
-        // stabilization check
-        if (tempDiff < 0.1 && humDiff < 0.5) {
-            isCalibrated = true;
-            Serial.println("Calibration Mode is Done ✅");
-        }
+      // stabilization check
+      if (tempDiff < 0.5 && humDiff < 0.5) {
+        isCalibrated = true;
+        Serial.println("Calibration Mode is Done ✅");
+      }
 
-        // debug output
-        Serial.print("Calibrated Humidity: ");
-        Serial.print(humidityOffSet);
-        Serial.print(" %  |  ");
-        Serial.print("Calibrated Temperature: ");
-        Serial.print(temperatureOffSet);
-        Serial.println(" °C");
+      // debug output
+      Serial.print("Calibrated Humidity: ");
+      Serial.print(humidityOffSet);
+      Serial.print(" %  |  ");
+      Serial.print("Calibrated Temperature: ");
+      Serial.print(temperatureOffSet);
+      Serial.println(" °C");
     }
 
-    delay(2000);
+
+    // keep only last N samples
+    if (samples.size() > samplesCount + 1) {
+        samples.pop();
+    }
+
+    delay(200);
+
 }
 
 
@@ -100,6 +115,10 @@ float DHTReader::readTemperature() {
 }
 float DHTReader::readHumidity() {
   return isCalibrated ? humidityOffSet : readRawHumidity();
+}
+
+bool DHTReader::isCalibrat(){
+  return isCalibrated;
 }
 
 
