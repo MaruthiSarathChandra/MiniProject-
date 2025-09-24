@@ -43,6 +43,7 @@ void SerialHandler::handleInput() {
     switch (input) {
       case '1':
         monitoringActive = true;
+        dhtReader.calibrate();
         Serial.println("Monitoring Started.....");
         break;
 
