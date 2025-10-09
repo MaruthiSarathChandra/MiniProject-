@@ -22,7 +22,7 @@ void DHTReader::begin() {
 
 // raw getters
 float DHTReader::readRawHumidity() {
-  Serial.print("here");
+  //Serial.print("here");
   return dht.readHumidity();
 }
 float DHTReader::readRawTemperature() {
@@ -42,7 +42,7 @@ void DHTReader::calibrate() {
     //Serial.print("Entered");
 
     float samplesCount = 30;
-    float tSum = 0.0, hSum = 0.0;
+    //float tSum = 0.0, hSum = 0.0;
 
     while(samples.size() < samplesCount) {
       float t = readRawTemperature();
