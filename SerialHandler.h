@@ -10,9 +10,13 @@ class SerialHandler {
     bool monitoringActive;
     float tempThreshold;
     float humidityThreshold;
+    float tempThresholdmin;
+    float humidityThresholdmin;
 
 
   public:
+
+    bool flag = true;
     // constructor
     SerialHandler();  
 
@@ -29,6 +33,11 @@ class SerialHandler {
     void setTemperatureThreshold();
     void setHumidityThreshold();
     bool getMonitoringActive();
+    void setMinTemperatureThershold();
+    void setMinHumidityThershold();
+    float getMinTemperatureThreshold();
+    float getMinHumidityThreshold();
+    void getMenu();
 
 };
 
