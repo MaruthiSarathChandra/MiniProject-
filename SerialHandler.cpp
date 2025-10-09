@@ -12,6 +12,8 @@ SerialHandler::SerialHandler() {
   // default thershold value of temp and humidity 
   tempThreshold = 30.0;    
   humidityThreshold = 70.0;
+  tempThresholdmin = 15.0;
+  humidityThresholdmin = 30.0;
 
 }
 
@@ -23,7 +25,10 @@ void SerialHandler::showMenu() {
   Serial.println("Press 3 --> Get Temperature and Humidity");
   Serial.println("Press 4 --> Set Temperature Threshold");
   Serial.println("Press 5 --> Set Humidity Threshold");
-  Serial.println("Press 6 --> Get Temperature And Humidity Thershold");
+  Serial.println("Press 6 --> Set minTemperature Threshold");
+  Serial.println("Press 7 --> Set minHumidity Threshold");
+  Serial.println("Press 8 --> Get Temperature And Humidity Thershold");
+  Serial.println("Press 9 --> show menu");
   Serial.println("-------------------");
   Serial.print("Enter choice: ");
 }
@@ -73,8 +78,14 @@ void SerialHandler::handleInput() {
       case '5':
         setHumidityThreshold();
         break;
-
       case '6':
+        setMinTemperatureThershold();
+        break;
+      case '7':
+        setMinHumidityThershold();
+        break;
+
+      case '8':
         Serial.print("Humidity Threshold: ");
         Serial.print(getHumidityThreshold());
         Serial.print(" %  |  ");
@@ -82,6 +93,11 @@ void SerialHandler::handleInput() {
         Serial.print(getTemperatureThreshold());
         Serial.println(" °C");
         break;
+
+      case '9':
+        showMenu();
+        break;
+
 
       default:
         Serial.println("Invalid choice");
@@ -100,6 +116,15 @@ float SerialHandler::getTemperatureThreshold() {
 
 float SerialHandler::getHumidityThreshold() {
   return humidityThreshold;
+}
+
+//getter
+float SerialHandler::getMinTemperatureThreshold() {
+  return tempThresholdmin;
+}
+
+float SerialHandler::getMinHumidityThreshold() {
+  return humidityThresholdmin;
 }
 
 
@@ -136,9 +161,64 @@ void SerialHandler::setTemperatureThreshold() {
 
 }
 
+//min temperature setter
+void SerialHandler::setMinTemperatureThershold() {
+
+  Serial.print("Enter Min Temperature Value: ");
+  
+  while (!Serial.available()); // wait
+  
+  Serial.println("Updating Min Temperature Threshold......");
+  
+  tempThresholdmin = Serial.parseFloat();
+  
+  delay(200);
+  
+  Serial.println("Updated Temperature Thershold:" + String(tempThresholdmin));
+}
+
+
+
+//min humidity setter
+void SerialHandler::setMinHumidityThershold() {
+
+  Serial.print("Enter Min Humidity Value: ");
+
+  while (!Serial.available()); // wait
+
+  Serial.println("Updating Humidity Threshold......");
+  
+  humidityThresholdmin = Serial.parseFloat();
+
+  delay(200);
+  
+  Serial.println("Updated Temperature Thershold:" + String(humidityThresholdmin));
+
+}
+
+
+
+
+
+
+
+
+
+
 //getter
 bool SerialHandler::getMonitoringActive() {
   return monitoringActive;
 }
+
+void SerialHandler::getMenu() {
+  if(flag == true) {
+    showMenu();
+    flag = false;
+  }
+  delay(200);
+
+}
+
+
 
 
