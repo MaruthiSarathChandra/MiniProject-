@@ -17,6 +17,7 @@ private:
     bool isCalibrated;
 
     std::queue<std::pair<float, float>> samples;
+    float tSum = 0.0, hSum = 0.0;
 
 public:
     DHTReader();
